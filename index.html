@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/scripts.js"></script>
+
+    <title>Timekeeping System</title>
+   
+    <script>
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Система відстеження робочого часу для сіськадмінів</h1>
+        <img src="/static/binotel.png" alt="Binotel Logo">
+    </div>
+    <div class="sidebar">
+        <a onclick="showTab('calendar')">CALENDAR</a>
+        <a onclick="showTab('activity')">ACTIVITY</a>
+    </div>
+    <div class="main">
+        <div id="calendar" class="tab active">
+            <h2>Calendar</h2>
+            <form method="POST">
+                <label for="date">Select Date:</label>
+                <input type="date" name="date" required>
+                <label for="start_time">Start Time:</label>
+                <input type="time" name="start_time">
+                <label for="end_time">End Time:</label>
+                <input type="time" name="end_time">
+                <button type="submit">Save</button>
+            </form>
+            <div>
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+        <div id="activity" class="tab">
+            <h2>Activity</h2>
+            <table border="1">
+                <tr>
+                    <th>Month</th>
+                    <th>Total Hours</th>
+                </tr>
+                {% for month, hours in monthly_report.items() %}
+                <tr>
+                    <td>{{ month }}</td>
+                    <td>{{ hours }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>
